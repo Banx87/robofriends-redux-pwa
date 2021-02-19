@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import CardList from './components/Card/CardList'
+import SearchBox from './components/Card/SearchBox'
+import Scroll from './components/UI/Scroll.js'
+//import ErrorBoundary from './components/ErrorBoundary'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { setSearchfield, requestRobots } from './actions';
+import Header from './components/Header/Header'
+
+
+const mapStateToProps = state => {
+    return {
+        searchField: state.searchRobots.searchField,
+        robots: state.requestRobots.robots,
+        isPending: state.requestRobots.isPending,
+        error: state.requestRobots.error
+    }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSearchChange: (e) => dispatch(setSearchfield(e.target.value)),
+        onRequestRobots: () => dispatch(requestRobots())
+    }
+}
+
+
+class App extends Component {
+    componentDidMount() {
+        this.props.onRequestRobots();
+    }
+
+    render() {
+        const { searchField, onSearchChange, robots, isPending, error } = this.props;
+
+        const filteredRobots = robots.filter(robot => {
+            return robot.name.toLowerCase().includes(searchField.toLowerCase());
+        })
+        return isPending ?
+            <h1>Goofing around</h1> : (
+                <div className="tc">
+                    <Header/>
+                    <SearchBox searchChange={onSearchChange} />
+                    <Scroll>
+                        <CardList robots={filteredRobots} />
+                    </Scroll>
+                </div>
+            )
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
