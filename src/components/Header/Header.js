@@ -9,7 +9,7 @@ class Header extends Component {
         console.log("Header Rendered")
         return (
         <div>
-        <h1 className="f1">RoboFriends Redux</h1>
+        <h1 className="f1">RoboFriends Redux font change</h1>
             <CounterBtn color={'red'}/>
         </div>
         )
