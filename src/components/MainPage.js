@@ -8,18 +8,28 @@ import Header from './Header/Header'
 import './MainPage.css';
 
 class MainPage extends Component {
+
+    constructor() {
+        super()
+        this.state = {
+            count: 1
+        }
+    }
+
     componentDidMount() {
         this.props.onRequestRobots();
     }
 
     filterRobots = () => {
-        return this.props.robots.filter(robot => {
-            return robot.name.toLowerCase().includes(this.props.searchField.toLowerCase());
+        const {robots, searchField} = this.props;
+
+        return robots.filter(robot => {
+            return robot.name.toLowerCase().includes(searchField.toLowerCase());
         })
     }
 
     render() {
-        const {onSearchChange, robots, isPending} = this.props;
+        const {onSearchChange, isPending} = this.props;
        
         return (
             <div className="tc">
