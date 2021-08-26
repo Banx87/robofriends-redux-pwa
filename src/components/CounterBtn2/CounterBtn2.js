@@ -7,6 +7,7 @@ class CounterBtn2 extends Component {
       count: 0,
     };
   }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.count !== nextState.count) {
       return true;
