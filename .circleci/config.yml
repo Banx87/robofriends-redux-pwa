@@ -1,20 +1,33 @@
 version: 2.1
 jobs: 
-  boobie:
+  build:
     docker:
-     - image: circleci/ruby:2.4.1
+     - image: circleci/node:10.16.3
     steps: 
-    - checkout
-    - run: echo "A first hello"
-  sallie:
+      - checkout
+      - run: echo "npm installing"
+      - run: npm install
+      - run: CI=true npm run build
+  test:
     docker:
-     - image: circleci/ruby:2.4.1
+     - image: circleci/node:10.16.3
     steps: 
-    - checkout
-    - run: echo "Double trouble"
+      - checkout
+      - run: echo "testing"
+      - run: npm install
+      - run: npm test
+  hithere:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - run: echo "helllloooo!"
 workflows:
   version: 2
-  boobie_sallie:
+  build_test_and_lint:
     jobs:
-      - boobie
-      - sallie
+      - build
+      - hithere
+      - test:
+          requires:
+            - hithere
